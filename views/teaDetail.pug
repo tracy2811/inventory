@@ -3,6 +3,7 @@ extends layout
 block content
   h1= title
   p #{tea.description}
+  img(src=(tea.picture ? tea.picture : '/images/no-image.png'))
   p
     strong Category: 
     a(href=tea.category.url) #{tea.category.name}

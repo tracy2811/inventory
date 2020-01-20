@@ -4,6 +4,10 @@ const Category = require('../models/category');
 const async = require('async');
 const validator = require('express-validator');
 
+const fs = require('fs');
+const multer = require('multer');
+const upload = multer({ dest: 'public/images/uploads', });
+
 exports.index = function (req, res, next) {
 	async.parallel({
 		teaCount: function(callback) {
@@ -62,6 +66,8 @@ exports.teaCreateGet = function (req, res, next) {
 
 // Handle tea create on POST
 exports.teaCreatePost = [
+	upload.single('picture'),
+
 	// Validate fields
 	validator.body('name', 'Tea name required').isLength({ min: 1, }).trim(),
 	validator.body('description', 'Tea description required').isLength({ min: 1, }).trim(),
@@ -88,6 +94,10 @@ exports.teaCreatePost = [
 			price: req.body.price,
 			quantity: req.body.quantity,
 		});
+
+		if (req.file) {
+			tea.picture = req.file.path.slice(6);
+		}
 
 		if (!errors.isEmpty()) {
 			Category.find()
@@ -125,10 +135,13 @@ exports.teaDeleteGet = function (req, res, next) {
 
 // Handle tea delete on POST
 exports.teaDeletePost = function (req, res, next) {
-	Tea.findByIdAndRemove(req.params.id, function (err) {
+	Tea.findByIdAndRemove(req.params.id, function (err, tea) {
 		if (err) {
 			return next(err);
 		}
+		fs.unlink('public' + tea.picture, function (err) {
+			if (err) throw err;
+		});
 		res.redirect('/catalog/teas');
 	});
 };
@@ -159,6 +172,8 @@ exports.teaUpdateGet = function (req, res, next) {
 
 // Handle tea update on POST
 exports.teaUpdatePost = [
+	upload.single('picture'),
+
 	// Validate fields
 	validator.body('name', 'Tea name required').isLength({ min: 1, }).trim(),
 	validator.body('description', 'Tea description required').isLength({ min: 1, }).trim(),
@@ -187,6 +202,10 @@ exports.teaUpdatePost = [
 			_id: req.params.id,
 		});
 
+		if (req.file) {
+			tea.picture = req.file.path.slice(6);
+		}
+
 		if (!errors.isEmpty()) {
 			Category.find()
 				.exec(function (err, categories) {
@@ -198,6 +217,7 @@ exports.teaUpdatePost = [
 				});
 		}
 
+		// TODO: Delete old picture from server file system
 		Tea.findByIdAndUpdate(req.params.id, tea, {}, function (err, theTea) {
 			if (err) {
 				return next(err);
