@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  h1= title
+  p #{category.description}
+  each tea in teas
+    div
+      h2 
+        a(href=tea.url) #{tea.name}
+      p
+        strong Price: 
+        | #{tea.price}$/100g
+      p
+        if tea.quantity
+          strong Quantity: 
+          | #{tea.quantity}g
+        else
+          | Out of Stock
+  else
+    p There are no teas in this category.
+
+  div
+    ul
+      li
+        a(href=category.url + '/delete') Delete
+      li
+        a(href=category.url + '/update') Update

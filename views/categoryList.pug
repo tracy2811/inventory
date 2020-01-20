@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1= title
+  each cat in categories
+    div
+      h2
+        a(href=cat.url) #{cat.name}
+      p #{cat.description}
+  else
+    p There are no categories.
+

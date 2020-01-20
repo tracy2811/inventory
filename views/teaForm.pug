@@ -1,0 +1,39 @@
+extends layout
+
+block content
+  h1= title
+  form(method='POST' action='')
+    div
+      label(for='name') 
+        strong Name: 
+      input(type='text' name='name' id='name' placeholder='Tea Name' required='true' value=(tea? tea.name : ''))
+    div
+      label(for='description')
+        strong Description: 
+      textarea(name='description' id='description' placeholder='Some information about this tea...' required='true') #{tea? tea.description : ''}
+    div
+      label(for='category')
+        strong Category: 
+      select(name='category' id='category' required='true')
+        - categories.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+           for cat in categories
+             if tea
+               option(value=cat._id selected=(cat._id.toString()==tea.category.toString() ? 'selected' : false)) #{cat.name}
+             else
+               option(value=cat.id) #{cat.name}
+    div
+      label
+        strong Price: 
+        input(type='number' min='1' required='true' name='price' value=(tea ? tea.price : '1'))
+        | $/100g
+    div
+      label
+        strong Quantity: 
+        input(type='number' min='0' required='true' name='quantity' value=(tea ? tea.quantity : '0'))
+        | g
+    input(type='submit' value='Submit')
+  if errors
+    ul
+      each err in errors
+        li= err.msg
+

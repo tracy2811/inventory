@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h1= title
+  p #{tea.description}
+  p
+    strong Category: 
+    a(href=tea.category.url) #{tea.category.name}
+  p
+    strong Price: 
+    | #{tea.price}$/100g
+  p
+    if tea.quantity
+      strong Quantity: 
+      | #{tea.quantity}g
+    else
+      | Out of Stock
+  div
+   ul
+     li
+       a(href=tea.url + '/delete') Delete
+     li
+       a(href=tea.url + '/update') Update
+

@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h1= title
+  h2
+    a(href='/catalog/teas') Teas: #{data.teaCount}
+  h2
+    a(href='/catalog/categories') Categories: #{data.categoryCount}
+

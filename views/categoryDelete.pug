@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1= title
+  p #{category.description}
+  if teas.length
+    p Delete the following Teas before trying to delete this category:
+    ul
+      //- teas.sort(function(a, b) => {let textA = a.name; let textB= a.name; return texA < textB ? -1 : (textA > textB) ? 1 : 0;});
+      for tea in teas
+        li
+          a(href=tea.url) #{tea.name}
+  else
+    p
+      strong Do you really want to delete this category?
+    form(method='POST' action='') 
+      input(type='submit' value='Delete')
+

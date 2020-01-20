@@ -1,0 +1,24 @@
+doctype html
+html
+ head
+  meta(charset='utf-8')
+  title= title
+  link(rel='stylesheet', href='/stylesheets/style.css')
+ body
+  header
+   nav
+    ul
+     li
+      a(href='/catalog') Home
+     li
+      a(href='/catalog/teas') All Teas
+     li
+      a(href='/catalog/categories') All Categories
+     li
+      hr
+     li
+      a(href='/catalog/tea/create') Create new Tea
+     li
+      a(href='/catalog/category/create') Create new Category
+  main
+   block content
